@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EasyColoc – Présentation</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --bg2: #080d14;
+            --indigo: #6366f1;
+            --cyan: #06b6d4;
+            --emerald: #10b981;
+            --neon: #00e5a0;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+        }
+
+        .reveal {
+            font-family: 'Sora', sans-serif;
+            color: var(--text);
+        }
+
+        .reveal .slides section {
+            padding: 0;
+            height: 100%;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3 {
+            font-family: 'Sora', sans-serif;
+            text-transform: none;
+            letter-spacing: -0.025em;
+            color: var(--text);
+            line-height: 1.15;
+        }
+
+        .reveal .progress {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .reveal .progress span {
+            background: linear-gradient(to right, var(--indigo), var(--cyan));
+        }
+
+        .reveal .controls {
+            color: var(--indigo);
+        }
+
+        .reveal .slide-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            background: transparent;
+        }
+
+        /* ─── Aura background blobs ─── */
+        .aura {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .aura-tl {
+            width: 420px;
+            height: 420px;
+            background: var(--indigo);
+            top: -120px;
+            left: -120px;
+        }
+
+        .aura-br {
+            width: 380px;
+            height: 380px;
+            background: var(--cyan);
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .aura-mid {
+            width: 260px;
+            height: 260px;
+            background: var(--emerald);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08;
+        }
+
+        /* ─── Stars ─── */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: twinkle var(--dur, 4s) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: var(--op, 0.6);
+            }
+        }
+
+        /* ─── Slide container ─── */
+        .slide-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1150px;
+            padding: 2.5rem 3.5rem;
+        }
+
+        /* ─── Section label ─── */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 0.9rem;
+        }
+
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 22px;
+            height: 1.5px;
+            background: linear-gradient(to right, var(--indigo), var(--cyan));
+        }
+
+        /* ─── Gradient text ─── */
+        .g-indigo-cyan {
+            background: linear-gradient(135deg, var(--indigo) 0%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ─── Glass card ─── */
+        .card {
+            padding: 1.8rem 2rem;
+            border-radius: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.55rem;
+            background: linear-gradient(135deg, var(--indigo), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* ─── Card grid ─── */
+        .card-grid {
+            display: grid;
+            gap: 1.2rem;
+        }
+
+        .card-grid.cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .card-grid.cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card-grid.cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* ─── Feature rows ─── */
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 1.3rem;
+            padding: 1.25rem 1.7rem;
+            margin-bottom: 0.9rem;
+            border-radius: 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .feature-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-row .badge {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-row h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-row p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* ─── Pill ─── */
+        .pill {
+            display: inline-block;
+            padding: 5px 16px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+
+        .pill-indigo {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--indigo);
+            border: 1px solid rgba(99, 102, 241, 0.28);
+        }
+
+        .pill-cyan {
+            background: rgba(6, 182, 212, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(6, 182, 212, 0.28);
+        }
+
+        .pill-em {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--emerald);
+            border: 1px solid rgba(16, 185, 129, 0.28);
+        }
+
+        /* ─── Tech card ─── */
+        .tech-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+            text-align: center;
+        }
+
+        .tech-card img {
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .tech-card .t-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .tech-card .t-sub {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* ─── Checklist ─── */
+        .check-list {
+            list-style: none;
+        }
+
+        .check-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            padding: 0.4rem 0;
+        }
+
+        .check-list li .ck {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            color: var(--emerald);
+        }
+
+        /* ─── Glow divider ─── */
+        .glow-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(to right, var(--indigo), var(--cyan));
+            border-radius: 999px;
+            margin: 0.9rem auto;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* ─── Hero title ─── */
+        .hero-title {
+            font-size: clamp(4rem, 8vw, 7rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 20%, var(--indigo) 55%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.04em;
+        }
+
+        /* ─── CTA button ─── */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 9px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            color: var(--cyan);
+        }
+
+        /* ─── Border accents ─── */
+        .border-indigo {
+            border-top: 2px solid var(--indigo) !important;
+        }
+
+        .border-cyan {
+            border-top: 2px solid var(--cyan) !important;
+        }
+
+        /* ─── Final thanks ─── */
+        .thanks-text {
+            font-size: clamp(4.5rem, 10vw, 7.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #fff 30%, var(--indigo) 65%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ─── Fragments ─── */
+        .reveal .fragment {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .reveal .fragment.visible {
+            opacity: 1;
+        }
+
+        /* ─── Mono label ─── */
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Aura blobs -->
+    <div class="aura aura-tl"></div>
+    <div class="aura aura-br"></div>
+    <div class="aura aura-mid"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- ═══════════════ SLIDE 1 – Hero ═══════════════ -->
+            <section data-background-color="#0a0a1a">
+                <div class="slide-inner" style="text-align:center;">
+                    <div class="section-label" style="justify-content:center; margin-bottom:1.5rem;">
+                        Projet Web · 2026
+                    </div>
+                    <h1 class="hero-title">EasyColoc</h1>
+                    <p
+                        style="font-size:1.2rem; color:var(--muted); font-weight:300; margin-bottom:1.8rem; line-height:1.6;">
+                        La plateforme de gestion de colocation<br>nouvelle génération
+                    </p>
+                    <div style="display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap;">
+                        <span class="pill pill-indigo">Gestion d'équipe</span>
+                        <span class="pill pill-cyan">Suivi Financier</span>
+                        <span class="pill pill-em">Laravel 12</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 2 – Description ═══════════════ -->
+            <section data-background-color="#080d14">
+                <div class="slide-inner">
+                    <div class="section-label">Description du Projet</div>
+                    <h2 style="font-size:2.6rem; margin-bottom:1rem;">
+                        Qu'est-ce qu'<span class="g-indigo-cyan">EasyColoc</span> ?
+                    </h2>
+                    <p
+                        style="font-size:1rem; color:var(--muted); line-height:1.75; margin-bottom:1.5rem; max-width:740px;">
+                        EasyColoc est une solution web conçue pour <strong
+                            style="color:var(--text);">centraliser</strong> et <strong
+                            style="color:var(--text);">simplifier</strong> le quotidien des colocataires — transformant
+                        une gestion souvent chaotique en une expérience fluide et transparente.
+                    </p>
+                    <div class="card-grid cols-2">
+                        <div class="card border-indigo">
+                            <h3>Centralisation</h3>
+                            <p>Toutes les informations importantes réunies en un seul endroit, accessible à l'ensemble
+                                des colocataires en temps réel.</p>
+                        </div>
+                        <div class="card border-cyan">
+                            <h3>Transparence</h3>
+                            <p>Équilibre parfait entre les dépenses et les contributions de chaque membre de la
+                                colocation.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 3 – Personnel ═══════════════ -->
+            <section data-background-color="#0a0a1a">
+                <div class="slide-inner">
+                    <div class="section-label">Fonctionnalité</div>
+                    <h2 style="font-size:2.6rem; margin-bottom:1.3rem;">
+                        Gestion du <span class="g-indigo-cyan">Personnel</span>
+                    </h2>
+                    <div class="card-grid cols-3">
+                        <div class="card fragment fade-up">
+                            <div
+                                style="width:44px;height:44px;border-radius:11px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                            </div>
+                            <h3>Système d'Invitation</h3>
+                            <p>Envoi d'invitations sécurisées par e-mail avec tokens uniques et expiration automatique.
+                            </p>
+                        </div>
+                        <div class="card fragment fade-up" data-fragment-index="1">
+                            <div
+                                style="width:44px;height:44px;border-radius:11px;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4"
+                                    stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                            </div>
+                            <h3>Rôles Dynamiques</h3>
+                            <p>Propriétaires, membres actifs et administrateurs système avec permissions granulaires.
+                            </p>
+                        </div>
+                        <div class="card fragment fade-up" data-fragment-index="2">
+                            <div
+                                style="width:44px;height:44px;border-radius:11px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                            </div>
+                            <h3>Modération Admin</h3>
+                            <p>Dashboard de contrôle pour gérer les utilisateurs, leurs droits, et les bannir si besoin.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 4 – Fonctionnalités Avancées ═══════════════ -->
+            <section data-background-color="#080d14">
+                <div class="slide-inner">
+                    <div class="section-label">Capacités Clés</div>
+                    <h2 style="font-size:2.6rem; margin-bottom:1.3rem;">
+                        Fonctionnalités <span class="g-indigo-cyan">Avancées</span>
+                    </h2>
+
+                    <div class="feature-row fragment fade-up">
+                        <div class="badge"
+                            style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                                stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10" />
+                                <line x1="12" y1="20" x2="12" y2="4" />
+                                <line x1="6" y1="20" x2="6" y2="14" />
+                            </svg>
+                        </div>
+                        <div style="flex:1;">
+                            <h3>Suivi Intelligent des Dépenses</h3>
+                            <p>Catégorisation automatique et visualisation graphique des dépenses par membre et par
+                                période.</p>
+                        </div>
+                        <span class="pill pill-indigo" style="flex-shrink:0;">Analytique</span>
+                    </div>
+
+                    <div class="feature-row fragment fade-up">
+                        <div class="badge"
+                            style="background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.25);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <div style="flex:1;">
+                            <h3>Règlements Automatisés</h3>
+                            <p>Algorithme qui calcule précisément les dettes entre chaque colocataire pour un solde
+                                équitable.</p>
+                        </div>
+                        <span class="pill pill-cyan" style="flex-shrink:0;">Automatique</span>
+                    </div>
+
+                    <div class="feature-row fragment fade-up">
+                        <div class="badge"
+                            style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981"
+                                stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <div style="flex:1;">
+                            <h3>Dashboard Temps Réel</h3>
+                            <p>Interface interactive avec statistiques clés pour une vue d'ensemble immédiate et
+                                actualisée.</p>
+                        </div>
+                        <span class="pill pill-em" style="flex-shrink:0;">Live</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 5 – Stack ═══════════════ -->
+            <section data-background-color="#0a0a1a">
+                <div class="slide-inner">
+                    <div class="section-label">Stack Technologique</div>
+                    <h2 style="font-size:2.6rem; margin-bottom:1.3rem;">
+                        Technologies <span class="g-indigo-cyan">Utilisées</span>
+                    </h2>
+                    <div class="card-grid cols-4" style="margin-bottom:1.1rem;">
+                        <div class="tech-card fragment zoom-in">
+                            <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg"
+                                alt="Laravel" />
+                            <span class="t-name">Laravel 12</span>
+                            <span class="t-sub">Backend Framework</span>
+                        </div>
+                        <div class="tech-card fragment zoom-in">
+                            <span
+                                style="font-family:'JetBrains Mono',monospace; font-size:1.9rem; font-weight:700; color:#9b59b6; line-height:1;">PHP</span>
+                            <span class="t-name">PHP 8.2</span>
+                            <span class="t-sub">Langage Serveur</span>
+                        </div>
+                        <div class="tech-card fragment zoom-in">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg"
+                                alt="Tailwind" />
+                            <span class="t-name">Tailwind CSS</span>
+                            <span class="t-sub">UI Framework</span>
+                        </div>
+                        <div class="tech-card fragment zoom-in">
+                            <span class="mono g-indigo-cyan"
+                                style="font-size:1.7rem; font-weight:700; line-height:1;">SQL</span>
+                            <span class="t-name">MySQL / SQLite</span>
+                            <span class="t-sub">Base de Données</span>
+                        </div>
+                    </div>
+                    <div style="text-align:center;">
+                        <span class="pill pill-cyan" style="padding:5px 16px; font-size:0.72rem;">
+                            Vite &mdash; compilation ultra-rapide des assets
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 6 – Gestion de Projet ═══════════════ -->
+            <section data-background-color="#080d14">
+                <div class="slide-inner">
+                    <div class="section-label">Organisation</div>
+                    <h2 style="font-size:2.6rem; margin-bottom:1.3rem;">
+                        Gestion de <span class="g-indigo-cyan">Projet</span>
+                    </h2>
+                    <div class="card-grid cols-2">
+                        <div class="card border-indigo">
+                            <div style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;">
+                                <div
+                                    style="width:48px;height:48px;border-radius:12px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);display:flex;align-items:center;justify-content:center;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                                        stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="18" />
+                                        <rect x="14" y="3" width="7" height="11" />
+                                    </svg>
+                                </div>
+                                <h3 style="font-size:1.15rem;color:var(--text);-webkit-text-fill-color:var(--text);">
+                                    Trello</h3>
+                            </div>
+                            <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.65;">Tableau
+                                Kanban pour le suivi agile des tâches, du backlog jusqu'à la production.</p>
+                            <a href="https://trello.com/b/MfqTZc8S/easycoloc" target="_blank" class="cta-btn">
+                                Accéder au Trello
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="card border-cyan">
+                            <div style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;">
+                                <div
+                                    style="width:48px;height:48px;border-radius:12px;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.25);display:flex;align-items:center;justify-content:center;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4"
+                                        stroke-width="2">
+                                        <circle cx="18" cy="18" r="3" />
+                                        <circle cx="6" cy="6" r="3" />
+                                        <circle cx="6" cy="18" r="3" />
+                                        <path d="M6 9v6M15.5 6.5l-9 9" />
+                                    </svg>
+                                </div>
+                                <h3 style="font-size:1.15rem;color:var(--text);-webkit-text-fill-color:var(--text);">Git
+                                    / GitHub</h3>
+                            </div>
+                            <ul class="check-list">
+                                <li><span class="ck">&#10003;</span> Versioning structuré du code</li>
+                                <li><span class="ck">&#10003;</span> Branches par fonctionnalités</li>
+                                <li><span class="ck">&#10003;</span> Historique complet des itérations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════ SLIDE 7 – Merci ═══════════════ -->
+            <section data-background-color="#0a0a1a">
+                <div class="slide-inner" style="text-align:center;">
+                    <div class="section-label" style="justify-content:center; margin-bottom:1.3rem;">Fin de présentation
+                    </div>
+                    <h2 class="thanks-text">Merci !</h2>
+                    <div class="glow-divider"></div>
+                    <p style="color:var(--muted);font-size:1.15rem;margin-bottom:1.8rem;font-weight:300;">Des questions
+                        ?</p>
+                    <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;">
+                        <span class="pill pill-indigo">EasyColoc</span>
+                        <span class="pill pill-cyan">Laravel 12</span>
+                        <span class="pill pill-em">2026</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        /* ─ Stars ─ */
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 130; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const sz = Math.random() * 2 + 0.5;
+            s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random() * 100}%;left:${Math.random() * 100}%;--dur:${Math.random() * 5 + 2}s;--op:${Math.random() * 0.5 + 0.2};animation-delay:${Math.random() * 6}s;`;
+            starsEl.appendChild(s);
+        }
+
+        /* ─ Reveal ─ */
+        Reveal.initialize({
+            hash: true,
+            center: true,
+            transition: 'fade',
+            backgroundTransition: 'fade',
+            mouseWheel: true,
+            controls: true,
+            progress: true,
+            slideNumber: 'c/t',
+            autoAnimate: true,
+            width: 1200,
+            height: 720,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+        });
+    </script>
+</body>
+
+</html>
